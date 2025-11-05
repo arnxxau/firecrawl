@@ -6,6 +6,8 @@ metadata:
     app: {{ include "firecrawl.name" . }}-playwright
 spec:
   replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-playwright

@@ -28,6 +28,8 @@ metadata:
     app: {{ include "firecrawl.name" . }}-nuq-postgres
 spec:
   replicas: {{ .Values.nuqPostgres.replicaCount | default 1 }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-nuq-postgres

@@ -6,6 +6,8 @@ metadata:
     app: {{ include "firecrawl.name" . }}-nuq-worker
 spec:
   replicas: {{ .Values.nuqWorker.replicaCount | default 5 }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-nuq-worker
