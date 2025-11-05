@@ -1,7 +1,7 @@
 api:
   replicaCount: 1
   image:
-    repository: ghcr.io/firecrawl/firecrawl
+    repository: harbor.tenea.com/firecrawl/api
     tag: "latest"
     pullPolicy: Always
   resources:
@@ -15,7 +15,7 @@ api:
 worker:
   replicaCount: 1
   image:
-    repository: ghcr.io/firecrawl/firecrawl
+    repository: harbor.tenea.com/firecrawl/api
     tag: "latest"
     pullPolicy: Always
   resources:
@@ -29,7 +29,7 @@ worker:
 nuqWorker:
   replicaCount: 5
   image:
-    repository: ghcr.io/firecrawl/firecrawl
+    repository: harbor.tenea.com/firecrawl/api
     tag: "latest"
     pullPolicy: Always
   resources:
@@ -43,12 +43,10 @@ nuqWorker:
 nuqPostgres:
   replicaCount: 1
   image:
-    repository: ghcr.io/firecrawl/nuq-postgres
+    repository: harbor.tenea.com/firecrawl/nuq-postgres
     tag: latest
     pullPolicy: Always
-  auth:
-    username: postgres
-    database: postgres
+
   resources:
     requests:
       memory: "512Mi"
@@ -56,18 +54,16 @@ nuqPostgres:
     limits:
       memory: "1Gi"
       cpu: "500m"
+
   persistence:
-    enabled: false
-    size: 10Gi
-    storageClass: ""
-    accessMode: ReadWriteOnce
+    enabled: true
 
 dockerSecretEnabled: true
 
 playwright:
   replicaCount: 1
   image:
-    repository: ghcr.io/firecrawl/playwright-service
+    repository: harbor.tenea.com/firecrawl/playwright-service
     tag: "latest"
     pullPolicy: Always
   resources:
@@ -91,8 +87,9 @@ redis:
 
 service:
   api:
-    type: ClusterIP
+    type: NodePort
     port: 3002
+    nodePort: 30083
   playwright:
     type: ClusterIP
     port: 3000
@@ -119,7 +116,7 @@ secret:
   SLACK_WEBHOOK_URL: ""
   LLAMAPARSE_API_KEY: ""
   BULL_AUTH_KEY: ""
-  TEST_API_KEY: ""
+  # TEST_API_KEY: "fc-7d71c9e6e387160e907eea9a1c03012de0f064cb5a1651413cf71d63b5b69f32"
   POSTHOG_API_KEY: ""
   POSTHOG_HOST: ""
   SCRAPING_BEE_API_KEY: ""
@@ -129,4 +126,4 @@ secret:
   REDIS_PASSWORD: ""
 
 imagePullSecrets:
-  - name: docker-registry-secret
+  - name: harbor
