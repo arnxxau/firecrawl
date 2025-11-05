@@ -1,11 +1,35 @@
+{{- if .Values.nuqPostgres.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "firecrawl.name" . }}-nuq-postgres-pvc
+  labels:
+    app: {{ include "firecrawl.name" . }}-nuq-postgres
+spec:
+  accessModes:
+    - {{ .Values.nuqPostgres.persistence.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.nuqPostgres.persistence.storageClass }}
+  {{- if (eq "-" .Values.nuqPostgres.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.nuqPostgres.persistence.storageClass | quote }}
+  {{- end }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.nuqPostgres.persistence.size | default "10Gi" }}
+---
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-nuq-postgres
+  name: {{ include "firecrawl.name" . }}-nuq-postgres
   labels:
     app: {{ include "firecrawl.name" . }}-nuq-postgres
 spec:
   replicas: {{ .Values.nuqPostgres.replicaCount | default 1 }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-nuq-postgres
@@ -14,7 +38,7 @@ spec:
       labels:
         app: {{ include "firecrawl.name" . }}-nuq-postgres
     spec:
-      {{- if .Values.image.dockerSecretEnabled }}
+      {{- if .Values.dockerSecretEnabled }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
@@ -50,7 +74,7 @@ spec:
         - name: postgres-storage
           {{- if .Values.nuqPostgres.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "firecrawl.fullname" . }}-nuq-postgres-pvc
+            claimName: {{ include "firecrawl.name" . }}-nuq-postgres-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}
@@ -58,7 +82,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-nuq-postgres
+  name: {{ include "firecrawl.name" . }}-nuq-postgres
   labels:
     app: {{ include "firecrawl.name" . }}-nuq-postgres
 spec:

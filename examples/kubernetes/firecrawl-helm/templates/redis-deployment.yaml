@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-redis
+  name: {{ include "firecrawl.name" . }}-redis
   labels:
     app: {{ include "firecrawl.name" . }}-redis
 spec:
   replicas: {{ .Values.redis.replicaCount }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-redis
@@ -31,5 +33,17 @@ spec:
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "firecrawl.fullname" . }}-secret
+                name: {{ include "firecrawl.name" . }}-secret
                 key: REDIS_PASSWORD
+        {{- if .Values.redis.resources }}
+        resources:
+          {{- toYaml .Values.redis.resources | nindent 10 }}
+        {{- else }}
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        {{- end }}

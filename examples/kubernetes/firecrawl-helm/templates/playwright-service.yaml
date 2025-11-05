@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-playwright
+  name: {{ include "firecrawl.name" . }}-playwright
 spec:
   type: {{ .Values.service.playwright.type }}
   selector:

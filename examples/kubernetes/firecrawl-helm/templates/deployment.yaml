@@ -1,11 +1,13 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-api
+  name: {{ include "firecrawl.name" . }}-api
   labels:
     app: {{ include "firecrawl.name" . }}-api
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.api.replicaCount | default 1 }}
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: {{ include "firecrawl.name" . }}-api
@@ -14,15 +16,15 @@ spec:
       labels:
         app: {{ include "firecrawl.name" . }}-api
     spec:
-      {{- if .Values.image.dockerSecretEnabled }}
+      {{- if .Values.dockerSecretEnabled }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
       containers:
         - name: api
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          args: [ "pnpm", "run", "start" ]
+          image: "{{ .Values.api.image.repository }}:{{ .Values.api.image.tag }}"
+          imagePullPolicy: {{ .Values.api.image.pullPolicy }}
+          command: [ "node", "--import", "./dist/src/otel.js", "dist/src/index.js" ]
           ports:
             - containerPort: {{ .Values.service.api.port }}
           env:
@@ -30,9 +32,21 @@ spec:
               value: "app"
           envFrom:
             - configMapRef:
-                name: {{ include "firecrawl.fullname" . }}-config
+                name: {{ include "firecrawl.name" . }}-config
             - secretRef:
-                name: {{ include "firecrawl.fullname" . }}-secret
+                name: {{ include "firecrawl.name" . }}-secret
+          {{- if .Values.api.resources }}
+          resources:
+            {{- toYaml .Values.api.resources | nindent 12 }}
+          {{- else }}
+          resources:
+            requests:
+              memory: "2G"
+              cpu: "500m"
+            limits:
+              memory: "3G"
+              cpu: "1000m"
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /v0/health/liveness
