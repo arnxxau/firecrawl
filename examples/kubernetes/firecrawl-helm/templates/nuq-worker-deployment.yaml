@@ -16,15 +16,15 @@ spec:
       labels:
         app: {{ include "firecrawl.name" . }}-nuq-worker
     spec:
-      {{- if .Values.image.dockerSecretEnabled }}
+      {{- if .Values.dockerSecretEnabled }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
       terminationGracePeriodSeconds: 60
       containers:
         - name: nuq-worker
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          image: "{{ .Values.nuqWorker.image.repository }}:{{ .Values.nuqWorker.image.tag }}"
+          imagePullPolicy: {{ .Values.nuqWorker.image.pullPolicy }}
           command: [ "node" ]
           args: [ "--max-old-space-size=3072", "dist/src/services/worker/nuq-worker.js" ]
           env:

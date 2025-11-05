@@ -38,7 +38,7 @@ spec:
       labels:
         app: {{ include "firecrawl.name" . }}-nuq-postgres
     spec:
-      {{- if .Values.image.dockerSecretEnabled }}
+      {{- if .Values.dockerSecretEnabled }}
       imagePullSecrets:
         {{- toYaml .Values.imagePullSecrets | nindent 8 }}
       {{- end }}
