@@ -28,6 +28,9 @@ nuqPostgres:
       cpu: "500m"
   persistence:
     enabled: false
+    size: 10Gi
+    storageClass: ""
+    accessMode: ReadWriteOnce
 
 image:
   repository: ghcr.io/firecrawl/firecrawl

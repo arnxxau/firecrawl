@@ -1,3 +1,25 @@
+{{- if .Values.nuqPostgres.persistence.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "firecrawl.name" . }}-nuq-postgres-pvc
+  labels:
+    app: {{ include "firecrawl.name" . }}-nuq-postgres
+spec:
+  accessModes:
+    - {{ .Values.nuqPostgres.persistence.accessMode | default "ReadWriteOnce" }}
+  {{- if .Values.nuqPostgres.persistence.storageClass }}
+  {{- if (eq "-" .Values.nuqPostgres.persistence.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: {{ .Values.nuqPostgres.persistence.storageClass | quote }}
+  {{- end }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.nuqPostgres.persistence.size | default "10Gi" }}
+---
+{{- end }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
