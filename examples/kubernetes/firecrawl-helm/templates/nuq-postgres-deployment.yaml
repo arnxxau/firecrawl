@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-nuq-postgres
+  name: {{ include "firecrawl.name" . }}-nuq-postgres
   labels:
     app: {{ include "firecrawl.name" . }}-nuq-postgres
 spec:
@@ -50,7 +50,7 @@ spec:
         - name: postgres-storage
           {{- if .Values.nuqPostgres.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ include "firecrawl.fullname" . }}-nuq-postgres-pvc
+            claimName: {{ include "firecrawl.name" . }}-nuq-postgres-pvc
           {{- else }}
           emptyDir: {}
           {{- end }}
@@ -58,7 +58,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-nuq-postgres
+  name: {{ include "firecrawl.name" . }}-nuq-postgres
   labels:
     app: {{ include "firecrawl.name" . }}-nuq-postgres
 spec:

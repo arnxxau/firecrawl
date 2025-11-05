@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-redis
+  name: {{ include "firecrawl.name" . }}-redis
   labels:
     app: {{ include "firecrawl.name" . }}-redis
 spec:
@@ -31,5 +31,5 @@ spec:
           - name: REDIS_PASSWORD
             valueFrom:
               secretKeyRef:
-                name: {{ include "firecrawl.fullname" . }}-secret
+                name: {{ include "firecrawl.name" . }}-secret
                 key: REDIS_PASSWORD

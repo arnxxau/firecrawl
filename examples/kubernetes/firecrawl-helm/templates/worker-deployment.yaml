@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "firecrawl.fullname" . }}-worker
+  name: {{ include "firecrawl.name" . }}-worker
   labels:
     app: {{ include "firecrawl.name" . }}-worker
 spec:
@@ -28,6 +28,6 @@ spec:
               value: "worker"
           envFrom:
             - configMapRef:
-                name: {{ include "firecrawl.fullname" . }}-config
+                name: {{ include "firecrawl.name" . }}-config
             - secretRef:
-                name: {{ include "firecrawl.fullname" . }}-secret
+                name: {{ include "firecrawl.name" . }}-secret
