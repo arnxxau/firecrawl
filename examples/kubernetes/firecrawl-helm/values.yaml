@@ -4,13 +4,6 @@ api:
     repository: ghcr.io/firecrawl/firecrawl
     tag: "latest"
     pullPolicy: Always
-  resources:
-    requests:
-      memory: "2G"
-      cpu: "500m"
-    limits:
-      memory: "3G"
-      cpu: "1000m"
 
 worker:
   replicaCount: 1
@@ -18,13 +11,6 @@ worker:
     repository: ghcr.io/firecrawl/firecrawl
     tag: "latest"
     pullPolicy: Always
-  resources:
-    requests:
-      memory: "2G"
-      cpu: "500m"
-    limits:
-      memory: "3G"
-      cpu: "1000m"
 
 nuqWorker:
   replicaCount: 5
@@ -32,13 +18,6 @@ nuqWorker:
     repository: ghcr.io/firecrawl/firecrawl
     tag: "latest"
     pullPolicy: Always
-  resources:
-    requests:
-      memory: "3G"
-      cpu: "1000m"
-    limits:
-      memory: "4G"
-      cpu: "1000m"
 
 nuqPostgres:
   replicaCount: 1
@@ -49,13 +28,6 @@ nuqPostgres:
   auth:
     username: postgres
     database: postgres
-  resources:
-    requests:
-      memory: "512Mi"
-      cpu: "250m"
-    limits:
-      memory: "1Gi"
-      cpu: "500m"
   persistence:
     enabled: false
     size: 10Gi
@@ -70,24 +42,10 @@ playwright:
     repository: ghcr.io/firecrawl/playwright-service
     tag: "latest"
     pullPolicy: Always
-  resources:
-    requests:
-      memory: "1G"
-      cpu: "500m"
-    limits:
-      memory: "2G"
-      cpu: "1000m"
 
 redis:
   image: redis:alpine
   replicaCount: 1
-  resources:
-    requests:
-      memory: "256Mi"
-      cpu: "100m"
-    limits:
-      memory: "512Mi"
-      cpu: "500m"
 
 service:
   api:
