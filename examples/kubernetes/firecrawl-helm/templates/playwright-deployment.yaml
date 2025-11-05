@@ -32,14 +32,6 @@ spec:
           {{- if .Values.playwright.resources }}
           resources:
             {{- toYaml .Values.playwright.resources | nindent 12 }}
-          {{- else }}
-          resources:
-            requests:
-              memory: "1G"
-              cpu: "500m"
-            limits:
-              memory: "2G"
-              cpu: "1000m"
           {{- end }}
           livenessProbe:
             httpGet:

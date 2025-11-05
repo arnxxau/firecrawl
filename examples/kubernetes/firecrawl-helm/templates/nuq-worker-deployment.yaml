@@ -40,14 +40,6 @@ spec:
           {{- if .Values.nuqWorker.resources }}
           resources:
             {{- toYaml .Values.nuqWorker.resources | nindent 12 }}
-          {{- else }}
-          resources:
-            requests:
-              memory: "3G"
-              cpu: "1000m"
-            limits:
-              memory: "4G"
-              cpu: "1000m"
           {{- end }}
           livenessProbe:
             httpGet:

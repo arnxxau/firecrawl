@@ -62,14 +62,6 @@ spec:
           {{- if .Values.nuqPostgres.resources }}
           resources:
             {{- toYaml .Values.nuqPostgres.resources | nindent 12 }}
-          {{- else }}
-          resources:
-            requests:
-              memory: "512Mi"
-              cpu: "250m"
-            limits:
-              memory: "1Gi"
-              cpu: "500m"
           {{- end }}
       volumes:
         - name: postgres-storage

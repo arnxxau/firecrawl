@@ -38,12 +38,4 @@ spec:
         {{- if .Values.redis.resources }}
         resources:
           {{- toYaml .Values.redis.resources | nindent 10 }}
-        {{- else }}
-        resources:
-          requests:
-            memory: "256Mi"
-            cpu: "100m"
-          limits:
-            memory: "512Mi"
-            cpu: "500m"
         {{- end }}

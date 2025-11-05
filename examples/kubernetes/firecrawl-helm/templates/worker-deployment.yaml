@@ -36,12 +36,4 @@ spec:
           {{- if .Values.worker.resources }}
           resources:
             {{- toYaml .Values.worker.resources | nindent 12 }}
-          {{- else }}
-          resources:
-            requests:
-              memory: "2G"
-              cpu: "500m"
-            limits:
-              memory: "3G"
-              cpu: "1000m"
           {{- end }}
