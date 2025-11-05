@@ -39,7 +39,7 @@ spec:
               port: {{ .Values.service.playwright.port }}
             initialDelaySeconds: 30
             periodSeconds: 30
-            timeoutSeconds: 5
+            timeoutSeconds: 120
             successThreshold: 1
             failureThreshold: 3
           readinessProbe:
